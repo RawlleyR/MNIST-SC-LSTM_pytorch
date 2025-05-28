@@ -157,6 +157,7 @@ class CustomLSTM(nn.Module):
             #  print('max',maximum)
 
             c_t = torch.div(c_t, maximum)
+            # c_t = torch.div(c_t, 2)
             hidden_seq.append(h_t.unsqueeze(0))
         hidden_seq = torch.cat(hidden_seq, dim=0)
         # reshape from shape (sequence, batch, feature) to (batch, sequence, feature)
@@ -280,7 +281,7 @@ def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_d
             print('Epoch:  %d | Loss: %.4f | Train Accuracy: %.2f'
                   % (epoch, train_running_loss / i, train_acc / i))
 
-        torch.save(model.state_dict(), 'mnist_2_layer_adamax_train_gates_div_100-200hl.pth')  ### Saving  the model
+        torch.save(model.state_dict(), 'mnist_2_layer_adamax_train_cx_div2_200-100hl.pth')  ### Saving  the model
     else:
         ### If pretrained=True, Load and use the trained model to predict the values
         model.load_state_dict(torch.load('mnist_2_layer_adamax_train_gates_div_200-100hl.pth'))
@@ -584,6 +585,7 @@ def lstm_stoc_activation(input1,input2, lstm_size, hx, cx,hx_n,cx_n, weight_ih, 
         #  print('max',maximum)
 
         cx_n = torch.div(cx_n, maximum_n)
+        # cx_n = torch.div(cx_n, 2)
 
         cx_mse = ((cx_n - cx) ** 2).mean()
         hx_mse = ((hx_n - hx) ** 2).mean()
@@ -788,6 +790,7 @@ def lstm(input, lstm_size, hx, cx, weight_ih, weight_hh, bias_ih, bias_hh):
             maximum = max(torch.max(torch.abs(t)), maximum)
                 
         cx = torch.div(cx, maximum)
+        # cx = torch.div(cx, 2)
         
         hidden_seq.append(hx.unsqueeze(0))
     hidden_seq = torch.cat(hidden_seq, dim=0)
