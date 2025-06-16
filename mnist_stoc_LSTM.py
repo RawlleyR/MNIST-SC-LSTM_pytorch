@@ -206,8 +206,6 @@ def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_d
     model = Lstm_RNN(batch_size, seq_dim, input_dim, hidden_dim,hidden_dim2, output_dim, layer_dim)
     
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {device}")
-    model = model.to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adamax(model.parameters(), lr=0.01)
 
@@ -229,8 +227,8 @@ def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_d
 
                 # get the inputs
                 inputs, labels = data
-                inputs = inputs.view(-1, 28, 28).to(device)
-                labels = labels.to(device)
+                inputs = inputs.view(-1, 28, 28)
+                labels = labels
 
                 # forward + backward + optimize
                 outputs = model(inputs)
@@ -249,8 +247,7 @@ def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_d
         torch.save(model.state_dict(), 'mnist_2_layer_adamax_train_cx_div2_200-100hl.pth')  ### Saving  the model
     else:
         ### If pretrained=True, Load and use the trained model to predict the values
-        model.load_state_dict(torch.load('mnist_2_layer_adamax_train_gates_div_200-100hl.pth', map_location=device))
-        model = model.to(device)
+        model.load_state_dict(torch.load('mnist_2_layer_adamax_train_gates_div_200-100hl.pth'))
 
     return model
 
