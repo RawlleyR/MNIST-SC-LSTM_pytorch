@@ -12,6 +12,8 @@ import math
 from art.estimators.classification import PyTorchClassifier
 from art.attacks.evasion import CarliniL2Method
 import torch.nn.functional as F
+import torchattacks
+from tqdm import tqdm  # Optional: for a progress bar
 
 class CustomLSTM(nn.Module):
     def __init__(self, input_sz, hidden_sz):
@@ -104,8 +106,9 @@ class Lstm_RNN(nn.Module):
 
     def init_hidden(self, n_neurons):
         # (num_layers, batch_size, n_neurons)
-        return (torch.zeros(1,self.batch_size, n_neurons),
-                torch.zeros(1,self.batch_size, n_neurons))
+        device = next(self.parameters()).device
+        return (torch.zeros(1,self.batch_size, n_neurons).to(device),
+                torch.zeros(1,self.batch_size, n_neurons).to(device))
 
     def forward(self, X):
         # transforms X to dimensions: n_steps X batch_size X n_inputs
@@ -134,7 +137,7 @@ def get_accuracy(logit, target, batch_size):
     return accuracy.item()
 
 
-def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_dim,hidden_dim2, output_dim):
+def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_dim,hidden_dim2, output_dim, device):
     '''
         :param pretrained: if True: impelements already present trained model
         :param train_inout_seq: input data
@@ -147,8 +150,7 @@ def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_d
 
     model = Lstm_RNN(batch_size, seq_dim, input_dim, hidden_dim,hidden_dim2, output_dim)
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {device}")
+    device = device
     model = model.to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adamax(model.parameters(), lr=0.01)
@@ -166,8 +168,8 @@ def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_d
                 # zero the parameter gradients
                 optimizer.zero_grad()
 
-                # reset hidden states
-                model.hidden = model.init_hidden(hidden_dim)
+                # # reset hidden states
+                # model.hidden = model.init_hidden(hidden_dim)
 
                 # get the inputs
                 inputs, labels = data
@@ -243,6 +245,84 @@ def generate_cw_adversarial_examples(model, testloader, device):
 
     return x_adv, x_test, y_test
 
+# def generate_cw_adversarial_examples_gpu(model, testloader, device):
+#     model.eval()
+#     model.to(device)
+
+#     dataiter = iter(testloader)
+#     images, labels = next(dataiter)
+#     images = images.to(device)
+#     labels = labels.to(device)
+#     # print(images.size())  # (100, 1, 28, 28)
+
+#     # # ✅ Confirm on GPU
+#     # print("Model device:", next(model.parameters()).device)
+#     # print("Images device:", images.device)
+#     # print("Labels device:", labels.device)
+
+#     # Create GPU-accelerated C&W attack
+#     atk_images = images.squeeze(1)
+#     atk = torchattacks.CW(model, c=10, kappa=1, steps=1000, lr=0.01)
+#     # atk.set_return_type('float')  # Default is 'int', which disables gradients
+
+#     # Generate adversarial samples
+#     adv_images = atk(atk_images, labels)
+
+#     # Evaluate accuracy
+#     with torch.no_grad():
+#         outputs = model(adv_images)
+#         predicted = torch.argmax(outputs, dim=1)
+#         acc = (predicted == labels).float().mean().item()
+#         print(f"Accuracy on GPU C&W adversarial examples: {acc * 100:.2f}%")
+
+#     return adv_images, images, labels
+
+
+def generate_cw_adversarial_examples_gpu(model, testloader, device, num_batches=5):
+    model.eval()
+    model.to(device)
+
+    # Define the CW attack
+    atk = torchattacks.CW(model, c=10, kappa=1, steps=1000, lr=0.01)
+
+    adv_images_all = []
+    orig_images_all = []
+    labels_all = []
+
+    dataiter = iter(testloader)
+
+    for _ in tqdm(range(num_batches), desc="Running CW Attack"):
+        try:
+            images, labels = next(dataiter)
+        except StopIteration:
+            break  # End of dataset
+
+        images = images.to(device)
+        labels = labels.to(device)
+        images = images.squeeze(1)  # For MNIST: (N, 1, 28, 28) → (N, 28, 28)
+
+        # Generate adversarial examples
+        adv_images = atk(images, labels)
+
+        adv_images_all.append(adv_images.detach().cpu())
+        orig_images_all.append(images.detach().cpu())
+        labels_all.append(labels.detach().cpu())
+
+    # Concatenate all batches into single tensors
+    adv_images_all = torch.cat(adv_images_all)
+    orig_images_all = torch.cat(orig_images_all)
+    labels_all = torch.cat(labels_all)
+
+    # Evaluate attack accuracy (optional)
+    with torch.no_grad():
+        adv_images_all = adv_images_all.to(device)
+        outputs = model(adv_images_all)
+        predicted = torch.argmax(outputs, dim=1)
+        acc = (predicted == labels_all.to(device)).float().mean().item()
+        print(f"Accuracy on {num_batches * len(labels)} CW adversarial examples: {acc * 100:.2f}%")
+
+    return adv_images_all, orig_images_all, predicted, labels_all
+
 
 if __name__ == "__main__":
     
@@ -267,8 +347,37 @@ if __name__ == "__main__":
     num_epochs = 20
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print(f"Using device: {device}")
 
-    model = main(True, trainloader, num_epochs, batch_size, seq_dim, input_dim, hidden_dim, hidden_dim2, output_dim)
+    model = main(True, trainloader, num_epochs, batch_size, seq_dim, input_dim, hidden_dim, hidden_dim2, output_dim, device)
     
     # === Generate adversarial samples ===
-    x_adv, x_test, y_test = generate_cw_adversarial_examples(model, testloader, device)
+    # x_adv, x_test, y_test = generate_cw_adversarial_examples(model, testloader, device)
+    
+    x_adv, x_test, y_adv, y_test = generate_cw_adversarial_examples_gpu(model, testloader, device)
+    
+    # Check if channel dim exists
+    if x_adv.ndim == 3:
+        print("adding channel dimension to x_adv")
+        x_adv = x_adv.squeeze(1)
+        print(x_adv.size())
+    if x_test.ndim == 3:
+        print("adding channel dimension to x_test")
+        x_test = x_test.squeeze(1)
+        print(x_test.size())
+    
+    # Save them
+    # torch.save({
+    #     'adv_images': torch.tensor(x_adv).detach().cpu(),  # in case it's NumPy
+    #     'original_images': torch.tensor(x_test).detach().cpu(),
+    #     'original_labels': torch.tensor(y_test).detach().cpu()
+    # }, 'cwl2_adversarial_samples_ART.pt')
+    
+    torch.save({
+        'adv_images': x_adv.clone().detach().cpu(),  # in case it's NumPy
+        'original_images': x_test.clone().detach().cpu(),
+        'adv_labels': y_adv.clone().detach().cpu(),
+        'original_labels': y_test.clone().detach().cpu()
+    }, 'cw_adversarial_samples_tensorattacks.pt')
+
+    print("Adversarial samples saved to cw_adversarial_samples.pt")
