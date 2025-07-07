@@ -343,7 +343,7 @@ def lstm_stoc_activation(input1,input2, lstm_size, hx, cx,hx_n,cx_n, weight_ih, 
         gt_mse = ((g_t_n - bsn_actual_value(g_t)) ** 2).mean()
         ft_mse = ((f_t_n - bsn_actual_value(f_t)) ** 2).mean()
         ot_mse = ((o_t_n - bsn_actual_value(o_t)) ** 2).mean()
-        print('mse (it,  gt, ft, ot)', it_mse, gt_mse, ft_mse, ot_mse)
+        # print('mse (it,  gt, ft, ot)', it_mse, gt_mse, ft_mse, ot_mse)
 
 
         # print('it', bsn_actual_value(i_t[0][0:4]), i_t_n[0][0:4])
@@ -387,7 +387,7 @@ def lstm_stoc_activation(input1,input2, lstm_size, hx, cx,hx_n,cx_n, weight_ih, 
         hx_mse = ((hx_n - hx) ** 2).mean()
         # print('cx', cx[0][0:4], cx_n[0][0:4])
         # print('hx', hx[0][0:4], hx_n[0][0:4])
-        print('mse (cx, hx)', cx_mse, hx_mse)
+        # print('mse (cx, hx)', cx_mse, hx_mse)
         hidden_seq.append(hx.unsqueeze(0))
         hidden_seq_n.append(hx_n.unsqueeze(0))
     hidden_seq = torch.cat(hidden_seq, dim=0)
@@ -451,8 +451,8 @@ def lstm(input, lstm_size, hx, cx, weight_ih, weight_hh, bias_ih, bias_hh):
 def predict(from_scratch, test_loader, model, hidden_dim,hidden_dim2, batch_size):
     dictionary = {}
     test_losses = []
-    for param_tensor in model.state_dict():
-        print(param_tensor, "\t", model.state_dict()[param_tensor].size())
+    # for param_tensor in model.state_dict():
+    #     print(param_tensor, "\t", model.state_dict()[param_tensor].size())
 
     count = 0
     new = list(model.state_dict().items())
@@ -502,27 +502,27 @@ def predict(from_scratch, test_loader, model, hidden_dim,hidden_dim2, batch_size
         maximum2_w = 1.0
         for w in dictionary['lstm1.bias_w']:
             maximum_w = max(torch.max(torch.abs(w)), maximum_w)
-        print('bias_w', maximum_w)
+        # print('bias_w', maximum_w)
 
         for u in dictionary['lstm1.bias_u']:
             maximum_u = max(torch.max(torch.abs(u)), maximum_u)
-        print('bias_u', maximum_u)
+        # print('bias_u', maximum_u)
 
         for u in dictionary['lstm2.U']:
             maximum2_u = max(torch.max(torch.abs(u)), maximum2_u)
-        print('max_u', maximum2_u)
+        # print('max_u', maximum2_u)
 
         for u in dictionary['lstm2.W']:
             maximum2_w = max(torch.max(torch.abs(u)), maximum2_w)
-        print('max_w', maximum2_w)
+        # print('max_w', maximum2_w)
 
         for w in dictionary['FC.bias']:
             maximum_b_w = max(torch.max(torch.abs(w)), maximum_b_w)
-        print('lin_b', maximum_b_w)
+        # print('lin_b', maximum_b_w)
 
         for u in dictionary['FC.weight']:
             maximum_b_u = max(torch.max(torch.abs(u)), maximum_b_u)
-        print('lin_', maximum_b_u)
+        # print('lin_', maximum_b_u)
 
 
         for i, data in enumerate(testloader, 0):
@@ -609,7 +609,7 @@ if __name__ == "__main__":
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=2)
 
     # load adversarial test dataset
-    data = torch.load('cw_adversarial_500samples_tensorattacks(14.6%_10_1).pt')
+    data = torch.load('cw_adversarial_500samples_tensorattacks(9.4%_30_1.6_1100).pt')
     adv_images = data['adv_images']
     org_labels = data['original_labels']
 
