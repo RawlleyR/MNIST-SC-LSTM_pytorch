@@ -26,6 +26,7 @@ def test_model(model_path, batch_size, seq_dim, input_dim, hidden_dim, hidden_di
 
     correct = 0
     total = 0
+    predicted_all = []
 
     with torch.no_grad():
         for images, labels in testloader:
@@ -37,10 +38,13 @@ def test_model(model_path, batch_size, seq_dim, input_dim, hidden_dim, hidden_di
 
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
+            predicted_all.append(predicted.detach().cpu())
+        
+    predicted_all = torch.cat(predicted_all)
 
     print(f'Test Accuracy: {100 * correct / total:.2f}%')
     
-    return predicted, data['adv_labels'], org_labels
+    return predicted_all, data['adv_labels'], org_labels
 
 if __name__ == '__main__':
     device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
@@ -56,4 +60,4 @@ if __name__ == '__main__':
         device=device
     )
     
-    print("Pred: ", predicted, "\n", "adv_: ", adv_labels, "\n", "org_: ", org_labels)
+    # print("Pred: ", predicted, "\n", "adv_: ", adv_labels, "\n", "org_: ", org_labels)
