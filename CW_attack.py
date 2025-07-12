@@ -73,8 +73,10 @@ class CustomLSTM(nn.Module):
             )
             c_t = (f_t * c_t + i_t * g_t)
             h_t = o_t * torch.tanh(c_t)
-            for t in c_t:
-                maximum = max(torch.max(torch.abs(t)), maximum)
+            
+            # With sample-wise normalization:
+            maximum = torch.max(torch.abs(c_t), dim=-1, keepdim=True)[0]
+            maximum = torch.clamp(maximum, min=1.0)
             #  print('max',maximum)
 
             c_t = torch.div(c_t, maximum)
@@ -198,52 +200,52 @@ def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_d
 
     return model
 
-def generate_cw_adversarial_examples(model, testloader, device):
-    model.eval()
-    model.to(device)
+# def generate_cw_adversarial_examples(model, testloader, device):
+#     model.eval()    # activating test mode (ignores dropout layer instruction)
+#     model.to(device)
 
-    # Define loss and optimizer for ART
-    loss_fn = nn.CrossEntropyLoss()
-    optimizer = optim.Adamax(model.parameters(), lr=0.01)
+#     # Define loss and optimizer for ART
+#     loss_fn = nn.CrossEntropyLoss()
+#     optimizer = optim.Adamax(model.parameters(), lr=0.01)
 
-    classifier = PyTorchClassifier(
-        model=model,
-        loss=loss_fn,
-        optimizer=optimizer,
-        input_shape=(28, 28),  # For MNIST
-        nb_classes=10,
-        clip_values=(0.0, 1.0),
-    )
+#     classifier = PyTorchClassifier(
+#         model=model,
+#         loss=loss_fn,
+#         optimizer=optimizer,
+#         input_shape=(28, 28),  # For MNIST
+#         nb_classes=10,
+#         clip_values=(0.0, 1.0),
+#     )
 
-    # Get a batch of test data
-    dataiter = iter(testloader)
-    images, labels = next(dataiter)
-    images = images.to(device)
-    labels = labels.to(device)
+#     # Get a batch of test data
+#     dataiter = iter(testloader)
+#     images, labels = next(dataiter)
+#     images = images.to(device)
+#     labels = labels.to(device)
 
-    # Convert to NumPy
-    x_test = images.squeeze(1).cpu().numpy()
-    y_test = F.one_hot(labels, num_classes=10).cpu().numpy()
+#     # Convert to NumPy
+#     x_test = images.squeeze(1).cpu().numpy()
+#     y_test = F.one_hot(labels, num_classes=10).cpu().numpy()
 
-    # Create the attack
-    attack = CarliniL2Method(
-        classifier=classifier,
-        targeted=False,
-        max_iter=1000,  # Increase for stronger attacks
-        binary_search_steps=10,
-        learning_rate=0.01,
-        confidence=0.5
-    )
+#     # Create the attack
+#     attack = CarliniL2Method(
+#         classifier=classifier,
+#         targeted=False,
+#         max_iter=1000,  # Increase for stronger attacks
+#         binary_search_steps=10,
+#         learning_rate=0.01,
+#         confidence=0.5
+#     )
 
-    # Generate adversarial samples
-    x_adv = attack.generate(x=x_test)
+#     # Generate adversarial samples
+#     x_adv = attack.generate(x=x_test)
 
-    # Evaluate adversarial accuracy
-    preds_adv = classifier.predict(x_adv)
-    acc = np.mean(np.argmax(preds_adv, axis=1) == np.argmax(y_test, axis=1))
-    print(f"Accuracy on C&W adversarial examples: {acc * 100:.2f}%")
+#     # Evaluate adversarial accuracy
+#     preds_adv = classifier.predict(x_adv)
+#     acc = np.mean(np.argmax(preds_adv, axis=1) == np.argmax(y_test, axis=1))
+#     print(f"Accuracy on C&W adversarial examples: {acc * 100:.2f}%")
 
-    return x_adv, x_test, y_test
+#     return x_adv, x_test, preds_adv, y_test
 
 # def generate_cw_adversarial_examples_gpu(model, testloader, device):
 #     model.eval()
@@ -275,23 +277,32 @@ def generate_cw_adversarial_examples(model, testloader, device):
 #         acc = (predicted == labels).float().mean().item()
 #         print(f"Accuracy on GPU C&W adversarial examples: {acc * 100:.2f}%")
 
-#     return adv_images, images, labels
+#     return adv_images, images, predicted, labels
 
 
-def generate_cw_adversarial_examples_gpu(model, testloader, device, num_batches=5):
+def generate_cw_adversarial_examples_gpu(model, testloader, device, start_batch=0, num_batches=5):
     model.eval()
     model.to(device)
 
     # Define the CW attack
-    atk = torchattacks.CW(model, c=10, kappa=1, steps=1000, lr=0.01)
+    atk = torchattacks.CW(model, c=10, kappa=1.6, steps=1000, lr=0.01)
 
     adv_images_all = []
     orig_images_all = []
     labels_all = []
 
     dataiter = iter(testloader)
+    
+    # Skip batches before start_batch
+    for i in range(start_batch):
+        try:
+            # print(f"skipping batch {i + 1}")
+            next(dataiter)
+        except StopIteration:
+            print("Reached end of dataset while skipping batches.")
+            return None
 
-    for _ in tqdm(range(num_batches), desc="Running CW Attack"):
+    for _ in tqdm(range(num_batches), desc=f"Running CW Attack (batches {start_batch + 1}-{start_batch + num_batches})"):
         try:
             images, labels = next(dataiter)
         except StopIteration:
@@ -319,7 +330,7 @@ def generate_cw_adversarial_examples_gpu(model, testloader, device, num_batches=
         outputs = model(adv_images_all)
         predicted = torch.argmax(outputs, dim=1)
         acc = (predicted == labels_all.to(device)).float().mean().item()
-        print(f"Accuracy on {num_batches * len(labels)} CW adversarial examples: {acc * 100:.2f}%")
+        print(f"Accuracy on {num_batches * len(labels)} CW adversarial examples (batches {start_batch + 1}–{start_batch + num_batches}): {acc * 100:.2f}%")
 
     return adv_images_all, orig_images_all, predicted, labels_all
 
@@ -345,6 +356,8 @@ if __name__ == "__main__":
     output_dim = 10
     seq_dim = 28
     num_epochs = 20
+    start_batch = 0
+    num_batches = 5
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
@@ -354,16 +367,16 @@ if __name__ == "__main__":
     # === Generate adversarial samples ===
     # x_adv, x_test, y_test = generate_cw_adversarial_examples(model, testloader, device)
     
-    x_adv, x_test, y_adv, y_test = generate_cw_adversarial_examples_gpu(model, testloader, device)
+    x_adv, x_test, y_adv, y_test = generate_cw_adversarial_examples_gpu(model, testloader, device, start_batch, num_batches)
     
     # Check if channel dim exists
     if x_adv.ndim == 3:
         print("adding channel dimension to x_adv")
-        x_adv = x_adv.squeeze(1)
+        x_adv = x_adv.unsqueeze(1)
         print(x_adv.size())
     if x_test.ndim == 3:
         print("adding channel dimension to x_test")
-        x_test = x_test.squeeze(1)
+        x_test = x_test.unsqueeze(1)
         print(x_test.size())
     
     # Save them
@@ -378,6 +391,6 @@ if __name__ == "__main__":
         'original_images': x_test.clone().detach().cpu(),
         'adv_labels': y_adv.clone().detach().cpu(),
         'original_labels': y_test.clone().detach().cpu()
-    }, 'cw_adversarial_samples_tensorattacks.pt')
+    }, f'cw_adversarial_{num_batches*batch_size_test}samples_tensorattacks_batch{start_batch+1}-{start_batch+num_batches}.pt')
 
     print("Adversarial samples saved to cw_adversarial_samples.pt")
