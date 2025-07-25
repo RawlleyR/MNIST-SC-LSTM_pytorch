@@ -129,12 +129,13 @@ class CustomLSTM(nn.Module):
             )
             c_t = (f_t * c_t + i_t * g_t)
             h_t = o_t * torch.tanh(c_t)
-            for t in c_t:
-                maximum = max(torch.max(torch.abs(t)), maximum)
-            #  print('max',maximum)
+            # With sample-wise normalization:
+            # maximum = torch.max(torch.abs(c_t), dim=-1, keepdim=True)[0]
+            # maximum = torch.clamp(maximum, min=1.0)
+            # # print('max',maximum)
 
-            c_t = torch.div(c_t, maximum)
-            # c_t = torch.div(c_t, 2)
+            # c_t = torch.div(c_t, maximum)
+            c_t = torch.div(c_t, 2)
             hidden_seq.append(h_t.unsqueeze(0))
         hidden_seq = torch.cat(hidden_seq, dim=0)
         
@@ -247,7 +248,7 @@ def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_d
         torch.save(model.state_dict(), 'mnist_2_layer_adamax_train_cx_div2_200-100hl.pth')  ### Saving  the model
     else:
         ### If pretrained=True, Load and use the trained model to predict the values
-        model.load_state_dict(torch.load('mnist_2_layer_adamax_train_gates_div_200-100hl.pth'))
+        model.load_state_dict(torch.load('mnist_2_layer_adamax_train_cx_div2_200-100hl(98.43B&97.36SC).pth'))
 
     return model
 
@@ -367,21 +368,23 @@ def lstm_stoc_activation(input1,input2, lstm_size, hx, cx,hx_n,cx_n, weight_ih, 
         hx = ~(o_t ^ tan)
         hx = torch.Tensor(bsn_actual_value(hx))
         cx = torch.Tensor(bsn_actual_value(cx))
-        for t in cx:
-            maximum = max(torch.max(torch.abs(t)), maximum)
-        #  print('max',maximum)
+        # With sample-wise normalization:
+        # maximum = torch.max(torch.abs(cx), dim=-1, keepdim=True)[0]
+        # maximum = torch.clamp(maximum, min=1.0)
+        # # print('max',maximum)
 
-        cx = torch.div(cx, maximum)
+        # cx = torch.div(cx, maximum)
 
 
         hx_n = o_t_n * torch.tanh(cx_n)
 
-        for t in cx_n:
-           maximum_n = max(torch.max(torch.abs(t)), maximum_n)
-        #  print('max',maximum)
+        # With sample-wise normalization:
+        # maximum_n = torch.max(torch.abs(cx_n), dim=-1, keepdim=True)[0]
+        # maximum_n = torch.clamp(maximum_n, min=1.0)
+        # # print('max',maximum)
 
-        cx_n = torch.div(cx_n, maximum_n)
-        # cx_n = torch.div(cx_n, 2)
+        # cx_n = torch.div(cx_n, maximum_n)
+        cx_n = torch.div(cx_n, 2)
 
         cx_mse = ((cx_n - cx) ** 2).mean()
         hx_mse = ((hx_n - hx) ** 2).mean()
@@ -437,11 +440,12 @@ def lstm(input, lstm_size, hx, cx, weight_ih, weight_hh, bias_ih, bias_hh):
 
         cx = f_t * cx + i_t * g_t
         hx = o_t * torch.tanh(cx)
-        for t in cx:
-            maximum = max(torch.max(torch.abs(t)), maximum)
+        # With sample-wise normalization:
+        # maximum = torch.max(torch.abs(cx), dim=-1, keepdim=True)[0]
+        # maximum = torch.clamp(maximum, min=1.0)
                 
-        cx = torch.div(cx, maximum)
-        # cx = torch.div(cx, 2)
+        # cx = torch.div(cx, maximum)
+        cx = torch.div(cx, 2)
         
         hidden_seq.append(hx.unsqueeze(0))
     hidden_seq = torch.cat(hidden_seq, dim=0)
@@ -609,7 +613,7 @@ if __name__ == "__main__":
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=2)
 
     # load adversarial test dataset
-    data = torch.load('cw_adversarial_500samples_tensorattacks(9.4%_30_1.6_1100).pt')
+    data = torch.load('cw_adversarial_500samples_tensorattacks_batch1-5.pt')
     adv_images = data['adv_images']
     org_labels = data['original_labels']
 
