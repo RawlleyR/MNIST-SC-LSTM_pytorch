@@ -285,7 +285,7 @@ def generate_cw_adversarial_examples_gpu(model, testloader, device, start_batch=
     model.to(device)
 
     # Define the CW attack
-    atk = torchattacks.CW(model, c=10, kappa=1, steps=1000, lr=0.01)
+    atk = torchattacks.CW(model, c=100, kappa=0, steps=1000, lr=0.01)
 
     adv_images_all = []
     orig_images_all = []
@@ -334,6 +334,63 @@ def generate_cw_adversarial_examples_gpu(model, testloader, device, start_batch=
 
     return adv_images_all, orig_images_all, predicted, labels_all
 
+def generate_targeted_cw_adversarial_examples(model, testloader, device, target_class=0, start_batch=0, num_batches=5):
+    model.eval()
+    model.to(device)
+
+    adv_images_all = []
+    orig_images_all = []
+    orig_labels_all = []
+    target_labels_all = []
+
+    atk = torchattacks.CW(model, c=100, kappa=0, steps=10000, lr=0.01)
+    atk.set_mode_targeted_by_label(quiet=True)
+
+    dataiter = iter(testloader)
+
+    # Skip batches before start_batch
+    for i in range(start_batch):
+        try:
+            # print(f"skipping batch {i + 1}")
+            next(dataiter)
+        except StopIteration:
+            print("Reached end of dataset while skipping batches.")
+            return None
+
+    for _ in tqdm(range(num_batches), desc=f"Running CW Targeted Attack class {target_class} (batches {start_batch + 1}-{start_batch + num_batches})"):
+        try:
+            images, labels = next(dataiter)
+        except StopIteration:
+            break  # End of dataset
+
+        images, labels = images.to(device), labels.to(device)
+        images = images.squeeze(1)
+        orig_images_all.append(images.clone().detach().cpu())
+        orig_labels_all.append(labels.clone().detach().cpu())
+
+        # Generate target labels
+        target_labels = torch.full_like(labels, target_class, device=device)
+        target_labels_all.append(target_labels.clone().detach().cpu())
+
+        # Generate adversarial examples
+        adv_images = atk(images, target_labels)
+        adv_images_all.append(adv_images.clone().detach().cpu())
+
+    # Stack all collected tensors
+    adv_images_all = torch.cat(adv_images_all, dim=0)
+    orig_images_all = torch.cat(orig_images_all, dim=0)
+    orig_labels_all = torch.cat(orig_labels_all, dim=0)
+    target_labels_all = torch.cat(target_labels_all, dim=0)
+
+    # Evaluate how many fooled into target class
+    with torch.no_grad():
+        outputs = model(adv_images_all.to(device))
+        preds = torch.argmax(outputs, dim=1)
+        targeted_success = (preds == target_labels_all.to(device)).float().mean().item()
+        print(f"Targeted attack success rate (target={target_class}): {targeted_success * 100:.2f}%")
+
+    return adv_images_all, orig_images_all, preds, target_labels_all, orig_labels_all
+
 
 if __name__ == "__main__":
     
@@ -367,7 +424,11 @@ if __name__ == "__main__":
     # === Generate adversarial samples ===
     # x_adv, x_test, y_test = generate_cw_adversarial_examples(model, testloader, device)
     
-    x_adv, x_test, y_adv, y_test = generate_cw_adversarial_examples_gpu(model, testloader, device, start_batch, num_batches)
+    # x_adv, x_test, y_adv, y_test = generate_cw_adversarial_examples_gpu(model, testloader, device, start_batch, num_batches)
+    
+    target_class = 7
+    x_adv, x_test, y_adv, y_target, y_test = generate_targeted_cw_adversarial_examples(
+    model, testloader, device, target_class, start_batch, num_batches)
     
     # Check if channel dim exists
     if x_adv.ndim == 3:
@@ -386,11 +447,21 @@ if __name__ == "__main__":
     #     'original_labels': torch.tensor(y_test).detach().cpu()
     # }, 'cwl2_adversarial_samples_ART.pt')
     
+    # torch.save({
+    #     'adv_images': x_adv.clone().detach().cpu(),  # in case it's NumPy
+    #     'original_images': x_test.clone().detach().cpu(),
+    #     'adv_labels': y_adv.clone().detach().cpu(),
+    #     'original_labels': y_test.clone().detach().cpu()
+    # }, f'cw_adversarial_{num_batches*batch_size_test}samples_tensorattacks_batch{start_batch+1}-{start_batch+num_batches}.pt')
+    
+    # print("Adversarial samples saved to cw_adversarial_samples.pt")
+    
     torch.save({
-        'adv_images': x_adv.clone().detach().cpu(),  # in case it's NumPy
-        'original_images': x_test.clone().detach().cpu(),
-        'adv_labels': y_adv.clone().detach().cpu(),
-        'original_labels': y_test.clone().detach().cpu()
-    }, f'cw_adversarial_{num_batches*batch_size_test}samples_tensorattacks_batch{start_batch+1}-{start_batch+num_batches}.pt')
+    'adv_images': x_adv.clone().detach().cpu(),
+    'original_images': x_test.clone().detach().cpu(),
+    'adv_labels': y_adv.clone().detach().cpu(),
+    'target_labels': y_target.clone().detach().cpu(),
+    'original_labels': y_test.clone().detach().cpu()
+}, f'cw_targeted_{target_class}_adv_{num_batches*batch_size_test}samples_tensorattacks_batch{start_batch+1}-{start_batch+num_batches}.pt')
 
-    print("Adversarial samples saved to cw_adversarial_samples.pt")
+    print(f"Adversarial samples saved to cw_targeted_{target_class}_samples.pt")
