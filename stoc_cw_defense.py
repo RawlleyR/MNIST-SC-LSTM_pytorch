@@ -455,6 +455,7 @@ def lstm(input, lstm_size, hx, cx, weight_ih, weight_hh, bias_ih, bias_hh):
 def predict(from_scratch, test_loader, model, hidden_dim,hidden_dim2, batch_size):
     dictionary = {}
     test_losses = []
+    pred_all = []
     # for param_tensor in model.state_dict():
     #     print(param_tensor, "\t", model.state_dict()[param_tensor].size())
 
@@ -588,8 +589,10 @@ def predict(from_scratch, test_loader, model, hidden_dim,hidden_dim2, batch_size
                 pred_norm = output_normal.data.max(1, keepdim=True)[1]
                 correct_norm += pred_norm.eq(labels.data.view_as(pred_norm)).sum()
                 print('no_of_correct_norm', correct_norm)
+                pred_all.append(pred.detach().cpu())
         test_loss /= len(test_loader.dataset)
         test_losses.append(test_loss)
+        pred_all = torch.cat(pred_all)
         # test_losses.append(test_loss)
         print('\nTest set: Avg. loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, len(test_loader.dataset),
@@ -599,7 +602,7 @@ def predict(from_scratch, test_loader, model, hidden_dim,hidden_dim2, batch_size
         # print('Test Accuracy: %.2f' % (test_acc / i))
 
     # actual_predictions = scaler.inverse_transform(np.array(test_inputs[train_window:]).reshape(-1, 1))
-    return None
+    return pred_all
 
 if __name__ == "__main__":
     # Importing the dataset
@@ -613,7 +616,7 @@ if __name__ == "__main__":
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=2)
 
     # load adversarial test dataset
-    data = torch.load('cw_adversarial_500samples_tensorattacks_batch1-5.pt')
+    data = torch.load('cw_targeted_bestcase_adv_500samples_tensorattacks_batch1-5(97%_100_0).pt')
     adv_images = data['adv_images']
     org_labels = data['original_labels']
 
@@ -642,4 +645,8 @@ if __name__ == "__main__":
         count += 1
 
     #print('size',dictionary['lstm1.bias_u'].shape)
-    accuracy = predict(True, testloader, model, hidden_dim, hidden_dim2, batch_size_test)
+    predicted = predict(True, testloader, model, hidden_dim, hidden_dim2, batch_size_test)
+    
+    df = pd.DataFrame(predicted, columns=["SC_pred"])
+    df.to_excel("SC_pred_output_targeted_bestcase.xlsx", index=False)
+    print("Saved Excel file with SC predictions.")
