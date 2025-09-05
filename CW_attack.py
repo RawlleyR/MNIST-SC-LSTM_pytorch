@@ -343,7 +343,7 @@ def generate_targeted_cw_adversarial_examples(model, testloader, device, target_
     orig_labels_all = []
     target_labels_all = []
 
-    atk = torchattacks.CW(model, c=100, kappa=0, steps=10000, lr=0.01)
+    atk = torchattacks.CW(model, c=100, kappa=0, steps=50000, lr=0.01)
     atk.set_mode_targeted_by_label(quiet=True)
 
     dataiter = iter(testloader)
@@ -357,7 +357,7 @@ def generate_targeted_cw_adversarial_examples(model, testloader, device, target_
             print("Reached end of dataset while skipping batches.")
             return None
 
-    for _ in tqdm(range(num_batches), desc=f"Running CW Targeted Attack class {target_class} (batches {start_batch + 1}-{start_batch + num_batches})"):
+    for i in tqdm(range(num_batches), desc=f"Running CW Targeted Attack class {target_class} (batches {start_batch + 1}-{start_batch + num_batches})"):
         try:
             images, labels = next(dataiter)
         except StopIteration:
@@ -370,6 +370,7 @@ def generate_targeted_cw_adversarial_examples(model, testloader, device, target_
 
         # Generate target labels
         target_labels = torch.full_like(labels, target_class, device=device)
+        # target_labels = torch.load('best_target_tensor_params-100_0_1000.pt')[i*100:(i+1)*100]   # use for best case analyses
         target_labels_all.append(target_labels.clone().detach().cpu())
 
         # Generate adversarial examples
@@ -389,7 +390,7 @@ def generate_targeted_cw_adversarial_examples(model, testloader, device, target_
         targeted_success = (preds == target_labels_all.to(device)).float().mean().item()
         print(f"Targeted attack success rate (target={target_class}): {targeted_success * 100:.2f}%")
 
-    return adv_images_all, orig_images_all, preds, target_labels_all, orig_labels_all
+    return adv_images_all, orig_images_all, preds, target_labels_all, orig_labels_all, targeted_success
 
 
 if __name__ == "__main__":
@@ -414,7 +415,7 @@ if __name__ == "__main__":
     seq_dim = 28
     num_epochs = 20
     start_batch = 0
-    num_batches = 5
+    num_batches = 10
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
@@ -426,8 +427,8 @@ if __name__ == "__main__":
     
     # x_adv, x_test, y_adv, y_test = generate_cw_adversarial_examples_gpu(model, testloader, device, start_batch, num_batches)
     
-    target_class = 7
-    x_adv, x_test, y_adv, y_target, y_test = generate_targeted_cw_adversarial_examples(
+    target_class = 9
+    x_adv, x_test, y_adv, y_target, y_test, success = generate_targeted_cw_adversarial_examples(
     model, testloader, device, target_class, start_batch, num_batches)
     
     # Check if channel dim exists
@@ -462,6 +463,6 @@ if __name__ == "__main__":
     'adv_labels': y_adv.clone().detach().cpu(),
     'target_labels': y_target.clone().detach().cpu(),
     'original_labels': y_test.clone().detach().cpu()
-}, f'cw_targeted_{target_class}_adv_{num_batches*batch_size_test}samples_tensorattacks_batch{start_batch+1}-{start_batch+num_batches}.pt')
+}, f'cw_targeted_{target_class}_adv_{num_batches*batch_size_test}samples_tensorattacks_batch{start_batch+1}-{start_batch+num_batches}({success*100:.2f}%).pt')
 
     print(f"Adversarial samples saved to cw_targeted_{target_class}_samples.pt")
