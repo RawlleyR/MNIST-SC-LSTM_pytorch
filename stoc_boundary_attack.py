@@ -6,6 +6,7 @@ import torchvision.transforms as transforms
 import torch
 import foolbox as fb
 from tqdm import tqdm
+import pandas as pd
 
 
 def half_adder(a, b):
@@ -257,8 +258,8 @@ def Linear(x, weight, bias):
 class SCHybridModel(nn.Module):
     """
     Stochastic-first-LSTM hybrid model.
-    First LSTM layer uses your PyTorch stochastic primitives (lstm_stoc_activation).
-    Second LSTM layer and FC are deterministic (use your lstm and Linear).
+    First LSTM layer is stochastic (lstm_stoc_activation using PyTorch).
+    Second LSTM layer and FC are binary (lstm and Linear).
     Returns logits (not softmax), shape [batch, n_classes].
     """
     def __init__(self, dictionary, hidden_dim, hidden_dim2, output_dim, device='cpu'):
@@ -276,12 +277,10 @@ class SCHybridModel(nn.Module):
             self.fc.weight.copy_(dictionary['FC.weight'])
             self.fc.bias.copy_(dictionary['FC.bias'])
 
-        # If you prefer to keep deterministic LSTM2 as custom function,
-        # we will call your `lstm` helper directly in forward, using weights from dictionary.
 
     def forward(self, x):
         """
-        x: either (N,1,28,28) or (N,28,28) — consistent with your other functions.
+        x: either (N,1,28,28) or (N,28,28)
         Returns logits: shape (N, output_dim)
         """
         # Format input: (batch,1,28,28) -> (batch,28,28) -> permute to (seq_len, batch, features)
@@ -362,7 +361,7 @@ def generate_boundary_adversarial_examples_gpu_autoinit(model, testloader, devic
         except StopIteration:
             break
 
-        # match your CW preprocessing: remove channel dim if present
+        # remove channel dim if present
         if images.dim() == 4 and images.size(1) == 1:
             images = images.squeeze(1)  # (N, 28, 28)
 
@@ -491,3 +490,31 @@ if __name__ == "__main__":
     }, f'boundary_adv_{num_batches*batch_size_test}samples_tensorattacks_batch{start_batch+1}-{start_batch+num_batches}({success_frac*100:.2f}%_{steps}_{step_adaptation}).pt')
 
     print(f"Adversarial samples saved to boundary_samples.pt")
+    
+    ## Uncomment the following code to test data on pytorch based SC network
+    
+    # correct = 0
+    # total = 0
+    # predicted_all = []
+
+    # with torch.no_grad():
+    #     for images, labels in testloader:
+    #         images = images.view(-1, 28, 28).to(device)
+    #         labels = labels.to(device)
+
+    #         outputs = sc_model(images)
+    #         _, predicted = torch.max(outputs.data, 1)
+
+    #         total += labels.size(0)
+    #         correct += (predicted == labels).sum().item()
+    #         print("correct: ", correct)
+    #         print("total: ", total)
+    #         predicted_all.append(predicted.detach().cpu())
+        
+    # predicted_all = torch.cat(predicted_all)
+    
+    # print(f'Test Accuracy: {100 * correct / total:.2f}%')
+    
+    # df = pd.DataFrame(predicted_all, columns=["SC_pred"])
+    # df.to_excel("SC_testset_inference_for_pytorchSC_model.xlsx", index=False)
+    # print("Saved Excel file with pytorch based SC predictions.")
