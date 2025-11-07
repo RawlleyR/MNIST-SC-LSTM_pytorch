@@ -1,7 +1,6 @@
 import torch
 import pandas as pd
 
-# Map target class → filename (update with your actual names)
 file_paths = {
     0: "cw_targeted_0_adv_500samples_tensorattacks_batch1-5(39.6%_100_0_10000).pt",
     1: "cw_targeted_1_adv_500samples_tensorattacks_batch1-5(74.8%_100_0_10000).pt",
@@ -74,4 +73,4 @@ df = pd.DataFrame(rows)
 
 # Save to Excel
 df.to_excel("cw_attack_summary_with_best_target.xlsx", index=False)
-print("✅ Excel file saved as cw_attack_summary_with_best_target.xlsx")
+print("Excel file saved as cw_attack_summary_with_best_target.xlsx")

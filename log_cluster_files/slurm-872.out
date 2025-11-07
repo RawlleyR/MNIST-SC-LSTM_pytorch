@@ -1,0 +1,86 @@
+Fri Oct 17 00:48:27 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 560.35.05              Driver Version: 560.35.05      CUDA Version: 12.6     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce GTX 1080 Ti     Off |   00000000:02:00.0 Off |                  N/A |
+|  0%   19C    P8              8W /  250W |       5MiB /  11264MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA GeForce GTX 1080        Off |   00000000:03:00.0 Off |                  N/A |
+| 28%   32C    P8              6W /  180W |       5MiB /   8192MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  Tesla P100-PCIE-16GB           Off |   00000000:83:00.0 Off |                    0 |
+| N/A   32C    P0             44W /  250W |     851MiB /  16384MiB |     99%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    2   N/A  N/A   3116109      C   python                                        318MiB |
+|    2   N/A  N/A   3419941      C   ...a/Documents/SC-LSTM/venv/bin/python        530MiB |
++-----------------------------------------------------------------------------------------+
+Using device: cuda:0
+Running Boundary Attack batches 1-1
+:   0%|          | 0/1 [00:00<?, ?it/s]
+Running per image
+:   0%|          | 0/10 [00:00<?, ?it/s][AImage 0
+Init ValueError. Entered the except block for image 0.
+
+Running per image
+:  10%|█         | 1/10 [17:23<2:36:33, 1043.73s/it][AImage 1
+Init ValueError. Entered the except block for image 1.
+
+Running per image
+:  20%|██        | 2/10 [31:17<2:02:42, 920.30s/it] [AImage 2
+Init ValueError. Entered the except block for image 2.
+
+Running per image
+:  30%|███       | 3/10 [44:21<1:40:06, 858.10s/it][AImage 3
+Init ValueError. Entered the except block for image 3.
+
+Running per image
+:  40%|████      | 4/10 [59:59<1:28:58, 889.72s/it][AImage 4
+
+Running per image
+:  50%|█████     | 5/10 [9:16:18<15:42:16, 11307.28s/it][AImage 5
+
+Running per image
+:  60%|██████    | 6/10 [17:07:03<18:57:43, 17065.96s/it][AImage 6
+Init ValueError. Entered the except block for image 6.
+
+Running per image
+:  70%|███████   | 7/10 [17:17:23<9:44:28, 11689.55s/it] [AImage 7
+Init ValueError. Entered the except block for image 7.
+
+Running per image
+:  80%|████████  | 8/10 [17:31:44<4:34:44, 8242.07s/it] [AImage 8
+Init ValueError. Entered the except block for image 8.
+
+Running per image
+:  90%|█████████ | 9/10 [17:34:55<1:35:25, 5725.33s/it][AImage 9
+Init ValueError. Entered the except block for image 9.
+
+Running per image
+: 100%|██████████| 10/10 [17:46:53<00:00, 4179.36s/it] [ARunning per image
+: 100%|██████████| 10/10 [17:46:53<00:00, 6401.31s/it]
+Running Boundary Attack batches 1-1
+: 100%|██████████| 1/1 [17:46:53<00:00, 64013.18s/it]Running Boundary Attack batches 1-1
+: 100%|██████████| 1/1 [17:46:53<00:00, 64013.18s/it]
+Boundary Attack autoinit finished: {'total_processed': 10, 'total_successes': 0, 'total_init_failures': 8, 'success_fraction': 0.0}
+adding channel dimension to x_adv
+torch.Size([10, 1, 28, 28])
+adding channel dimension to x_test
+torch.Size([10, 1, 28, 28])
+Traceback (most recent call last):
+  File "/home/rawllera/Documents/MNIST-SC-LSTM_pytorch/stoc_boundary_attack.py", line 638, in <module>
+    'success_flags': success_flags.clone().detach().cpu(),
+                     ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'clone'

@@ -1,0 +1,307 @@
+Process 3419941: /home/rawllera/Documents/SC-LSTM/venv/bin/python /home/rawllera/Documents/MNIST-SC-LSTM_pytorch/stoc_boundary_attack.py
+Python v3.11.13 (/usr/bin/python3.11)
+
+Thread 3419941 (active): "MainThread"
+    c10::_maybe_wrap_dim<long> (libtorch_cpu.so)
+    at::dim_list_to_bitset (libtorch_cpu.so)
+    at::meta::resize_reduction (libtorch_cpu.so)
+    at::meta::structured_sum_dim_IntList::meta (libtorch_cpu.so)
+    at::(anonymous namespace)::wrapper_CUDA_sum_dim_IntList (libtorch_cuda.so)
+    c10::impl::wrap_kernel_functor_unboxed_<c10::impl::detail::WrapFunctionIntoFunctor_<c10::CompileTimeFunctionPointer<at::Tensor(at::Tensor const&, c10::OptionalArrayRef<long>, bool, std::optional<c10::ScalarType>), &at::(anonymous namespace)::wrapper_CUDA_sum_dim_IntList(at::Tensor const&, c10::OptionalArrayRef<long>, bool, std::optional<c10::ScalarType>)>, at::Tensor, c10::guts::typelist::typelist<at::Tensor const&, c10::OptionalArrayRef<long>, bool, std::optional<c10::ScalarType> > >, at::Tensor(at::Tensor const&, c10::OptionalArrayRef<long>, bool, std::optional<c10::ScalarType>)>::call (libtorch_cuda.so)
+    at::_ops::sum_dim_IntList::redispatch (libtorch_cpu.so)
+    torch::autograd::VariableType::(anonymous namespace)::sum_dim_IntList (libtorch_cpu.so)
+    c10::impl::wrap_kernel_functor_unboxed_<c10::impl::detail::WrapFunctionIntoFunctor_<c10::CompileTimeFunctionPointer<at::Tensor(c10::DispatchKeySet, at::Tensor const&, c10::OptionalArrayRef<long>, bool, std::optional<c10::ScalarType>), &torch::autograd::VariableType::(anonymous namespace)::sum_dim_IntList(c10::DispatchKeySet, at::Tensor const&, c10::OptionalArrayRef<long>, bool, std::optional<c10::ScalarType>)>, at::Tensor, c10::guts::typelist::typelist<c10::DispatchKeySet, at::Tensor const&, c10::OptionalArrayRef<long>, bool, std::optional<c10::ScalarType> > >, at::Tensor(c10::DispatchKeySet, at::Tensor const&, c10::OptionalArrayRef<long>, bool, std::optional<c10::ScalarType>)>::call (libtorch_cpu.so)
+    at::_ops::sum_dim_IntList::call (libtorch_cpu.so)
+    torch::autograd::THPVariable_sum (libtorch_python.so)
+    packbits_torch (stochastic_torch.py:36)
+        Arguments:
+            tensor: <Tensor at 0x7f032ff88cb0>
+        Locals:
+            pad_bits: 0
+            powers_of_2: <Tensor at 0x7f02b3487a70>
+    <listcomp> (stochastic_torch.py:69)
+        Arguments:
+            .0: <tuple_iterator at 0x7f02b3460c10>
+        Locals:
+            val: <Tensor at 0x7f032ff8b770>
+    uni (stochastic_torch.py:69)
+        Arguments:
+            p: <Tensor at 0x7f0336231670>
+            n: <cell at 0x7f02b3460460>
+        Locals:
+            p_flat: <Tensor at 0x7f0336233410>
+    bip (stochastic_torch.py:95)
+        Arguments:
+            v: <Tensor at 0x7f0336233d10>
+            n: 512
+    lstm_stoc_activation (stoc_boundary_attack.py:156)
+        Arguments:
+            input1: <Tensor at 0x7f0336233050>
+            lstm_size: 200
+            hx: <Tensor at 0x7f0336230d70>
+            cx: <Tensor at 0x7f0336233fb0>
+            weight_ih: <Tensor at 0x7f02b340f2f0>
+            weight_hh: <Tensor at 0x7f02b340f3b0>
+            bias_ih: <Tensor at 0x7f02b340f470>
+            bias_hh: <Tensor at 0x7f02b340f530>
+        Locals:
+            seq_sz: 28
+            bs: 1
+            _: 28
+            hidden_seq: [<Tensor at 0x7f0336233c50>, <Tensor at 0x7f03362339b0>, <Tensor at 0x7f0336230d10>, <Tensor at 0x7f0336232c30>, ...]
+            HS: 200
+            t: 5
+            x_t: <Tensor at 0x7f0336233890>
+            maximum: 1
+            gates: <Tensor at 0x7f0336233ad0>
+            gates_it: <Tensor at 0x7f03362304d0>
+            i_t: <Tensor at 0x7f02b344f8f0>
+            gates_ft: <Tensor at 0x7f03362312b0>
+            f_t: <Tensor at 0x7f03362309b0>
+            gates_gt: <Tensor at 0x7f0336232e70>
+            g_t: <Tensor at 0x7f02b344dc70>
+            gates_ot: <Tensor at 0x7f03362326f0>
+            o_t: <Tensor at 0x7f0336230cb0>
+            cx1: <Tensor at 0x7f03362330b0>
+            cx2: <Tensor at 0x7f03362306b0>
+            tan: <Tensor at 0x7f02b344eb10>
+    forward (stoc_boundary_attack.py:301)
+        Arguments:
+            self: <SCHybridModel at 0x7f02b3674910>
+            x: <Tensor at 0x7f0336232150>
+        Locals:
+            x_seq: <Tensor at 0x7f0336233050>
+            batch_size: 1
+            state_h1: <Tensor at 0x7f03362329f0>
+            state_c1: <Tensor at 0x7f0336231130>
+    _call_impl (torch/nn/modules/module.py:1750)
+        Arguments:
+            self: <cell at 0x7f02b34606d0>
+        Locals:
+            args: <cell at 0x7f02b3460880>
+            kwargs: <cell at 0x7f02b3460b80>
+    _wrapped_call_impl (torch/nn/modules/module.py:1739)
+        Arguments:
+            self: <SCHybridModel at 0x7f02b3674910>
+        Locals:
+            args: (<Tensor at 0x7f0336232150>)
+            kwargs: {}
+    _model (foolbox/models/pytorch.py:49)
+        Arguments:
+            x: <Tensor at 0x7f0336232150>
+    __call__ (foolbox/models/base.py:102)
+        Arguments:
+            self: <PyTorchModel at 0x7f03220ee150>
+            inputs: <PyTorchTensor at 0x7f02b3460190>
+        Locals:
+            x: <PyTorchTensor at 0x7f02b3460190>
+            restore_type: <RestoreTypeFunc at 0x7f02b3457d90>
+            y: <PyTorchTensor at 0x7f02b3460190>
+    is_adversarial (foolbox/attacks/base.py:463)
+        Arguments:
+            perturbed: <PyTorchTensor at 0x7f02b3460190>
+    run (foolbox/attacks/boundary_attack.py:188)
+        Arguments:
+            self: <BoundaryAttack at 0x7f02b342bed0>
+            model: <PyTorchModel at 0x7f03220ee150>
+            criterion: <Misclassification at 0x7f02b46a0e50>
+        Locals:
+            early_stop: None
+            originals: <PyTorchTensor at 0x7f02b3460d00>
+            restore_type: <RestoreTypeFunc at 0x7f03066e9b10>
+            is_adversarial: <function at 0x7f02b3430f40>
+            init_attack: <LinearSearchBlendedUniformNoiseAttack at 0x7f02b3429c10>
+            best_advs: <PyTorchTensor at 0x7f02b3460760>
+            is_adv: <PyTorchTensor at 0x7f02b3460730>
+            tb: <TensorBoard at 0x7f02b46a3ad0>
+            N: 1
+            ndim: 3
+            spherical_steps: <PyTorchTensor at 0x7f02b3460fa0>
+            source_steps: <PyTorchTensor at 0x7f02b3460430>
+            stats_spherical_adversarial: <ArrayQueue at 0x7f02b346a190>
+            stats_step_adversarial: <ArrayQueue at 0x7f02b3468490>
+            bounds: (0, 1)
+            step: 2308
+            converged: <PyTorchTensor at 0x7f02b3460f10>
+            unnormalized_source_directions: <PyTorchTensor at 0x7f02b3460940>
+            source_norms: <PyTorchTensor at 0x7f02b3460df0>
+            source_directions: <PyTorchTensor at 0x7f02b3460ca0>
+            check_spherical_and_update_stats: False
+            candidates: <PyTorchTensor at 0x7f02b3460190>
+            spherical_candidates: <PyTorchTensor at 0x7f02b3460d60>
+            spherical_is_adv: None
+            distances: <PyTorchTensor at 0x7f02b34606a0>
+            closer: <PyTorchTensor at 0x7f02b3460e20>
+            is_best_adv: <PyTorchTensor at 0x7f02b3460970>
+            cond: <PyTorchTensor at 0x7f02b3460610>
+            full: <PyTorchTensor at 0x7f02b3460370>
+            probs: <PyTorchTensor at 0x7f02b34608e0>
+            cond1: <PyTorchTensor at 0x7f02b3460f70>
+            cond2: <PyTorchTensor at 0x7f02b3460c40>
+    __call__ (foolbox/attacks/base.py:416)
+        Arguments:
+            self: <BoundaryAttack at 0x7f02b342bed0>
+            model: <PyTorchModel at 0x7f03220ee150>
+            criterion: <Misclassification at 0x7f02b46a0e50>
+        Locals:
+            epsilons: [None]
+            kwargs: {}
+            x: <PyTorchTensor at 0x7f02b3460d00>
+            is_adversarial: <function at 0x7f02b34259e0>
+            was_iterable: False
+            N: 1
+            K: 1
+            early_stop: None
+    generate_boundary_adversarial_examples_gpu_batch_autoinit (stoc_boundary_attack.py:532)
+        Arguments:
+            model: <SCHybridModel at 0x7f02b3674910>
+            testloader: <DataLoader at 0x7f02b3429d50>
+            device: <torch.device at 0x7f02b54754f0>
+            start_batch: 0
+            num_batches: 1
+            steps: 5000
+            spherical_step: 0.01
+            step_adaptation: 1.5
+        Locals:
+            fmodel: <PyTorchModel at 0x7f03220ee150>
+            atk: <BoundaryAttack at 0x7f02b342bed0>
+            adv_images: [<Tensor at 0x7f0336231c10>, <Tensor at 0x7f03362308f0>, <Tensor at 0x7f0336231bb0>, <Tensor at 0x7f0336232a50>, ...]
+            orig_images: [<Tensor at 0x7f0336230ef0>, <Tensor at 0x7f0336232330>, <Tensor at 0x7f03362337d0>, <Tensor at 0x7f0336231a90>, ...]
+            adv_preds: [<Tensor at 0x7f0336231490>, <Tensor at 0x7f03362310d0>, <Tensor at 0x7f0336230950>, <Tensor at 0x7f0336231790>, ...]
+            labels_all: [<Tensor at 0x7f0336230bf0>, <Tensor at 0x7f0336232630>, <Tensor at 0x7f03362334d0>, <Tensor at 0x7f0336231730>, ...]
+            success_flags: [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
+            dataiter: <_MultiProcessingDataLoaderIter at 0x7f02b46a39d0>
+            total_processed: 100
+            total_successes: 0
+            total_init_failures: 9
+            total_batch_calls: 1
+            total_batch_failures: 1
+            b: 0
+            images: <Tensor at 0x7f02b344cf50>
+            labels: <Tensor at 0x7f02b344d070>
+            batch_size: 100
+            images_dev: <Tensor at 0x7f02b344cfb0>
+            labels_dev: <Tensor at 0x7f02b344d0d0>
+            raw_advs: <Tensor at 0x7f0336232cf0>
+            clipped_advs: <Tensor at 0x7f0336232cf0>
+            success: <Tensor at 0x7f03362307d0>
+            i: 15
+            x: <Tensor at 0x7f0336233530>
+            y: <Tensor at 0x7f0336231970>
+            succeeded: False
+            pred: <Tensor at 0x7f02b340f7d0>
+    <module> (stoc_boundary_attack.py:616)
+Thread 3420071 (idle): "QueueFeederThread"
+    do_futex_wait.constprop.1 (libpthread-2.28.so)
+    __new_sem_wait_slow.constprop.0 (libpthread-2.28.so)
+    PyThread_acquire_lock_timed (libpython3.11.so.1.0)
+    wait (threading.py:327)
+        Arguments:
+            self: <Condition at 0x7f02b342bfd0>
+            timeout: None
+        Locals:
+            waiter: <_thread.lock at 0x7f030fffe480>
+            saved_state: None
+            gotit: False
+    _feed (multiprocessing/queues.py:231)
+        Arguments:
+            buffer: <collections.deque at 0x7f02b34166b0>
+            notempty: <Condition at 0x7f02b342bfd0>
+            send_bytes: <method at 0x7f02b342bbc0>
+            writelock: <Lock at 0x7f02b343c4d0>
+            reader_close: <method at 0x7f02b46a3d00>
+            writer_close: <method at 0x7f02b3455900>
+            ignore_epipe: False
+            onerror: <function at 0x7f02b3431c60>
+            queue_sem: <BoundedSemaphore at 0x7f02b343c310>
+        Locals:
+            nacquire: <builtin_function_or_method at 0x7f02b34516c0>
+            nrelease: <builtin_function_or_method at 0x7f02b3451710>
+            nwait: <method at 0x7f02b3455b00>
+            bpopleft: <builtin_function_or_method at 0x7f02b3451e40>
+            sentinel: <object at 0x7f0307413020>
+            wacquire: <builtin_function_or_method at 0x7f0324c496c0>
+            wrelease: <builtin_function_or_method at 0x7f0324c49760>
+            obj: <memoryview at 0x7f02b3404880>
+    run (threading.py:982)
+        Arguments:
+            self: <Thread at 0x7f02b3455950>
+    _bootstrap_inner (threading.py:1045)
+        Arguments:
+            self: <Thread at 0x7f02b3455950>
+    _bootstrap (threading.py:1002)
+        Arguments:
+            self: <Thread at 0x7f02b3455950>
+    clone (libc-2.28.so)
+Thread 3420072 (idle): "QueueFeederThread"
+    do_futex_wait.constprop.1 (libpthread-2.28.so)
+    __new_sem_wait_slow.constprop.0 (libpthread-2.28.so)
+    PyThread_acquire_lock_timed (libpython3.11.so.1.0)
+    wait (threading.py:327)
+        Arguments:
+            self: <Condition at 0x7f02b3455690>
+            timeout: None
+        Locals:
+            waiter: <_thread.lock at 0x7f02b34560c0>
+            saved_state: None
+            gotit: False
+    _feed (multiprocessing/queues.py:231)
+        Arguments:
+            buffer: <collections.deque at 0x7f02b3416a70>
+            notempty: <Condition at 0x7f02b3455690>
+            send_bytes: <method at 0x7f02b34556c0>
+            writelock: <Lock at 0x7f02b3454f50>
+            reader_close: <method at 0x7f02b54fb480>
+            writer_close: <method at 0x7f02b3455a00>
+            ignore_epipe: False
+            onerror: <function at 0x7f02b3431c60>
+            queue_sem: <BoundedSemaphore at 0x7f02b3455590>
+        Locals:
+            nacquire: <builtin_function_or_method at 0x7f02b3451c10>
+            nrelease: <builtin_function_or_method at 0x7f02b3451c60>
+            nwait: <method at 0x7f02b3455d40>
+            bpopleft: <builtin_function_or_method at 0x7f02b3452110>
+            sentinel: <object at 0x7f0307413020>
+            wacquire: <builtin_function_or_method at 0x7f02b3451ad0>
+            wrelease: <builtin_function_or_method at 0x7f02b3451b20>
+            obj: <memoryview at 0x7f02b3404940>
+    run (threading.py:982)
+        Arguments:
+            self: <Thread at 0x7f02b3455ad0>
+    _bootstrap_inner (threading.py:1045)
+        Arguments:
+            self: <Thread at 0x7f02b3455ad0>
+    _bootstrap (threading.py:1002)
+        Arguments:
+            self: <Thread at 0x7f02b3455ad0>
+    clone (libc-2.28.so)
+Thread 3420073 (idle): "Thread-1"
+    do_futex_wait (libpthread-2.28.so)
+    __new_sem_wait_slow (libpthread-2.28.so)
+    PyThread_acquire_lock_timed (libpython3.11.so.1.0)
+    wait (threading.py:331)
+        Arguments:
+            self: <Condition at 0x7f02b3455fd0>
+            timeout: 10
+        Locals:
+            waiter: <_thread.lock at 0x7f02b346a080>
+            saved_state: None
+            gotit: False
+    wait (threading.py:629)
+        Arguments:
+            self: <Event at 0x7f02b3455f50>
+            timeout: 10
+        Locals:
+            signaled: False
+    run (tqdm/_monitor.py:60)
+        Arguments:
+            self: <TMonitor at 0x7f02b3455dd0>
+        Locals:
+            cur_t: 1760691674.3941143
+    _bootstrap_inner (threading.py:1045)
+        Arguments:
+            self: <TMonitor at 0x7f02b3455dd0>
+    _bootstrap (threading.py:1002)
+        Arguments:
+            self: <TMonitor at 0x7f02b3455dd0>
+    clone (libc-2.28.so)

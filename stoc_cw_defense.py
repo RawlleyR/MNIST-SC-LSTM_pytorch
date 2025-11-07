@@ -31,7 +31,7 @@ class LSTMModel(nn.Module):
         # Number of hidden layers
         self.layer_dim = layer_dim
 
-        # Building your LSTM
+        # Building LSTM
         # batch_first=True causes input/output tensors to be of shape
         # (batch_dim, seq_dim, feature_dim)
         self.init_linear = nn.Linear(input_dim, input_dim)

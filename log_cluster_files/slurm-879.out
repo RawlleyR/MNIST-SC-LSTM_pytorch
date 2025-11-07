@@ -1,0 +1,251 @@
+Thu Oct 23 11:11:16 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 560.35.05              Driver Version: 560.35.05      CUDA Version: 12.6     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce GTX 1080 Ti     Off |   00000000:02:00.0 Off |                  N/A |
+|  0%   18C    P8              8W /  250W |       5MiB /  11264MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA GeForce GTX 1080        Off |   00000000:03:00.0 Off |                  N/A |
+| 27%   26C    P8              5W /  180W |       5MiB /   8192MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  Tesla P100-PCIE-16GB           Off |   00000000:83:00.0 Off |                    0 |
+| N/A   30C    P0             32W /  250W |     321MiB /  16384MiB |     12%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    2   N/A  N/A   3490590      C   python                                        318MiB |
++-----------------------------------------------------------------------------------------+
+Using device: cuda:0
+Running Boundary Attack batches 5-9
+:   0%|          | 0/5 [00:00<?, ?it/s]
+Running per image
+:   0%|          | 0/10 [00:00<?, ?it/s][AImage 0
+Init ValueError. Entered the except block for image 0.
+
+Running per image
+:  10%|█         | 1/10 [05:49<52:22, 349.19s/it][AImage 1
+Init ValueError. Entered the except block for image 1.
+
+Running per image
+:  20%|██        | 2/10 [20:50<1:29:52, 674.12s/it][AImage 2
+
+Running per image
+:  30%|███       | 3/10 [8:34:29<27:00:36, 13890.86s/it][AImage 3
+Init ValueError. Entered the except block for image 3.
+
+Running per image
+:  40%|████      | 4/10 [8:37:41<14:08:16, 8482.68s/it] [AImage 4
+Init ValueError. Entered the except block for image 4.
+
+Running per image
+:  50%|█████     | 5/10 [8:51:18<7:56:31, 5718.38s/it] [AImage 5
+Init ValueError. Entered the except block for image 5.
+
+Running per image
+:  60%|██████    | 6/10 [9:01:42<4:25:45, 3986.45s/it][AImage 6
+
+Running per image
+:  70%|███████   | 7/10 [16:30:20<9:34:09, 11483.04s/it][AImage 7
+
+Running per image
+:  80%|████████  | 8/10 [24:05:04<9:10:27, 16513.54s/it][AImage 8
+Init ValueError. Entered the except block for image 8.
+
+Running per image
+:  90%|█████████ | 9/10 [24:26:45<3:15:57, 11757.74s/it][AImage 9
+Init ValueError. Entered the except block for image 9.
+
+Running per image
+: 100%|██████████| 10/10 [24:56:28<00:00, 8678.41s/it]  [ARunning per image
+: 100%|██████████| 10/10 [24:56:28<00:00, 8978.87s/it]
+Running Boundary Attack batches 5-9
+:  20%|██        | 1/5 [24:56:28<99:45:54, 89788.67s/it]
+Running per image
+:   0%|          | 0/10 [00:00<?, ?it/s][AImage 0
+
+Running per image
+:  10%|█         | 1/10 [7:35:34<68:20:06, 27334.09s/it][AImage 1
+Init ValueError. Entered the except block for image 1.
+
+Running per image
+:  20%|██        | 2/10 [7:49:27<26:06:04, 11745.51s/it][AImage 2
+Init ValueError. Entered the except block for image 2.
+
+Running per image
+:  30%|███       | 3/10 [8:07:59<13:23:48, 6889.82s/it] [AImage 3
+
+Running per image
+:  40%|████      | 4/10 [15:24:04<24:09:56, 14499.45s/it][AImage 4
+Init ValueError. Entered the except block for image 4.
+
+Running per image
+:  50%|█████     | 5/10 [15:37:56<13:17:34, 9570.93s/it] [AImage 5
+Init ValueError. Entered the except block for image 5.
+
+Running per image
+:  60%|██████    | 6/10 [16:08:43<7:42:58, 6944.75s/it] [AImage 6
+Init ValueError. Entered the except block for image 6.
+
+Running per image
+:  70%|███████   | 7/10 [16:30:11<4:14:46, 5095.53s/it][AImage 7
+
+Running per image
+:  80%|████████  | 8/10 [23:42:40<6:31:08, 11734.31s/it][AImage 8
+Init ValueError. Entered the except block for image 8.
+
+Running per image
+:  90%|█████████ | 9/10 [24:03:26<2:20:55, 8455.38s/it] [AImage 9
+Init ValueError. Entered the except block for image 9.
+
+Running per image
+: 100%|██████████| 10/10 [24:16:32<00:00, 6087.69s/it] [ARunning per image
+: 100%|██████████| 10/10 [24:16:32<00:00, 8739.22s/it]
+Running Boundary Attack batches 5-9
+:  40%|████      | 2/5 [49:13:00<73:38:57, 88379.02s/it]
+Running per image
+:   0%|          | 0/10 [00:00<?, ?it/s][AImage 0
+Init ValueError. Entered the except block for image 0.
+
+Running per image
+:  10%|█         | 1/10 [15:24<2:18:41, 924.63s/it][AImage 1
+Init ValueError. Entered the except block for image 1.
+
+Running per image
+:  20%|██        | 2/10 [31:40<2:07:18, 954.76s/it][AImage 2
+
+Running per image
+:  30%|███       | 3/10 [7:38:36<23:45:07, 12215.40s/it][AImage 3
+Init ValueError. Entered the except block for image 3.
+
+Running per image
+:  40%|████      | 4/10 [7:47:51<12:41:12, 7612.00s/it] [AImage 4
+Init ValueError. Entered the except block for image 4.
+
+Running per image
+:  50%|█████     | 5/10 [7:57:04<7:02:13, 5066.60s/it] [AImage 5
+Init ValueError. Entered the except block for image 5.
+
+Running per image
+:  60%|██████    | 6/10 [8:10:10<4:00:44, 3611.14s/it][AImage 6
+Init ValueError. Entered the except block for image 6.
+
+Running per image
+:  70%|███████   | 7/10 [8:21:43<2:12:52, 2657.37s/it][AImage 7
+
+Running per image
+:  80%|████████  | 8/10 [16:11:06<5:59:14, 10777.11s/it][AImage 8
+Init ValueError. Entered the except block for image 8.
+
+Running per image
+:  90%|█████████ | 9/10 [16:32:15<2:10:04, 7804.77s/it] [AImage 9
+Init ValueError. Entered the except block for image 9.
+
+Running per image
+: 100%|██████████| 10/10 [16:44:02<00:00, 5613.47s/it] [ARunning per image
+: 100%|██████████| 10/10 [16:44:02<00:00, 6024.27s/it]
+Running Boundary Attack batches 5-9
+:  60%|██████    | 3/5 [65:57:03<41:57:42, 75531.40s/it]
+Running per image
+:   0%|          | 0/10 [00:00<?, ?it/s][AImage 0
+Init ValueError. Entered the except block for image 0.
+
+Running per image
+:  10%|█         | 1/10 [12:42<1:54:25, 762.89s/it][AImage 1
+Init ValueError. Entered the except block for image 1.
+
+Running per image
+:  20%|██        | 2/10 [48:19<3:29:28, 1571.07s/it][AImage 2
+Init ValueError. Entered the except block for image 2.
+
+Running per image
+:  30%|███       | 3/10 [1:02:47<2:25:50, 1250.02s/it][AImage 3
+Init ValueError. Entered the except block for image 3.
+
+Running per image
+:  40%|████      | 4/10 [1:13:45<1:41:36, 1016.15s/it][AImage 4
+Init ValueError. Entered the except block for image 4.
+
+Running per image
+:  50%|█████     | 5/10 [1:23:08<1:11:04, 852.87s/it] [AImage 5
+Init ValueError. Entered the except block for image 5.
+
+Running per image
+:  60%|██████    | 6/10 [1:43:33<1:05:16, 979.23s/it][AImage 6
+Init ValueError. Entered the except block for image 6.
+
+Running per image
+:  70%|███████   | 7/10 [1:58:03<47:10, 943.59s/it]  [AImage 7
+Init ValueError. Entered the except block for image 7.
+
+Running per image
+:  80%|████████  | 8/10 [2:09:06<28:28, 854.31s/it][AImage 8
+Init ValueError. Entered the except block for image 8.
+
+Running per image
+:  90%|█████████ | 9/10 [2:20:56<13:29, 809.22s/it][AImage 9
+Init ValueError. Entered the except block for image 9.
+
+Running per image
+: 100%|██████████| 10/10 [2:47:31<00:00, 1051.65s/it][ARunning per image
+: 100%|██████████| 10/10 [2:47:31<00:00, 1005.11s/it]
+Running Boundary Attack batches 5-9
+:  80%|████████  | 4/5 [68:44:34<13:48:00, 49680.51s/it]
+Running per image
+:   0%|          | 0/10 [00:00<?, ?it/s][AImage 0
+
+Running per image
+:  10%|█         | 1/10 [7:19:00<65:51:06, 26340.67s/it][AImage 1
+Init ValueError. Entered the except block for image 1.
+
+Running per image
+:  20%|██        | 2/10 [7:31:21<25:04:15, 11281.94s/it][AImage 2
+
+Running per image
+:  30%|███       | 3/10 [14:44:24<34:59:22, 17994.71s/it][AImage 3
+
+Running per image
+:  40%|████      | 4/10 [22:11:18<35:47:39, 21476.63s/it][AImage 4
+
+Running per image
+:  50%|█████     | 5/10 [29:38:18<32:30:17, 23403.50s/it][AImage 5
+Init ValueError. Entered the except block for image 5.
+
+Running per image
+:  60%|██████    | 6/10 [30:02:58<17:43:17, 15949.44s/it][AImage 6
+Init ValueError. Entered the except block for image 6.
+
+Running per image
+:  70%|███████   | 7/10 [30:16:51<9:10:22, 11007.40s/it] [AImage 7
+Init ValueError. Entered the except block for image 7.
+
+Running per image
+:  80%|████████  | 8/10 [30:33:49<4:20:54, 7827.27s/it] [AImage 8
+Init ValueError. Entered the except block for image 8.
+
+Running per image
+:  90%|█████████ | 9/10 [30:43:50<1:32:48, 5568.38s/it][AImage 9
+Init ValueError. Entered the except block for image 9.
+
+Running per image
+: 100%|██████████| 10/10 [30:53:06<00:00, 4020.86s/it] [ARunning per image
+: 100%|██████████| 10/10 [30:53:06<00:00, 11118.66s/it]
+Running Boundary Attack batches 5-9
+: 100%|██████████| 5/5 [99:37:41<00:00, 71860.04s/it]   Running Boundary Attack batches 5-9
+: 100%|██████████| 5/5 [99:37:41<00:00, 71732.27s/it]
+Boundary Attack autoinit finished: {'total_processed': 50, 'total_successes': 1, 'total_init_failures': 38, 'success_fraction': 0.02}
+adding channel dimension to x_adv
+torch.Size([50, 1, 28, 28])
+adding channel dimension to x_test
+torch.Size([50, 1, 28, 28])
+Adversarial samples saved to boundary_samples.pt

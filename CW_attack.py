@@ -257,7 +257,7 @@ def main(pretrained,trainloader,epochs, batch_size, seq_dim, input_dim, hidden_d
 #     labels = labels.to(device)
 #     # print(images.size())  # (100, 1, 28, 28)
 
-#     # # ✅ Confirm on GPU
+#     # # Confirm on GPU
 #     # print("Model device:", next(model.parameters()).device)
 #     # print("Images device:", images.device)
 #     # print("Labels device:", labels.device)

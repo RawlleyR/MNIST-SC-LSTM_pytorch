@@ -1,0 +1,81 @@
+Mon Nov  3 11:25:25 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 560.35.05              Driver Version: 560.35.05      CUDA Version: 12.6     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce GTX 1080 Ti     Off |   00000000:02:00.0 Off |                  N/A |
+|  0%   33C    P0             59W /  250W |       5MiB /  11264MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA GeForce GTX 1080        Off |   00000000:03:00.0 Off |                  N/A |
+| 27%   29C    P8              6W /  180W |       5MiB /   8192MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  Tesla P100-PCIE-16GB           Off |   00000000:83:00.0 Off |                    0 |
+| N/A   30C    P0             32W /  250W |     321MiB /  16384MiB |     11%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    2   N/A  N/A    165362      C   python                                        318MiB |
++-----------------------------------------------------------------------------------------+
+Using device: cuda:0
+Running Boundary Attack batches 10-10
+:   0%|          | 0/1 [00:00<?, ?it/s]
+Running per image
+:   0%|          | 0/10 [00:00<?, ?it/s][AImage 0
+Init ValueError. Entered the except block for image 0.
+
+Running per image
+:  10%|█         | 1/10 [18:49<2:49:22, 1129.12s/it][AImage 1
+Init ValueError. Entered the except block for image 1.
+
+Running per image
+:  20%|██        | 2/10 [30:28<1:56:52, 876.54s/it] [AImage 2
+
+Running per image
+:  30%|███       | 3/10 [16:15:43<51:16:54, 26373.50s/it][AImage 3
+Init ValueError. Entered the except block for image 3.
+
+Running per image
+:  40%|████      | 4/10 [16:34:40<27:21:02, 16410.46s/it][AImage 4
+Init ValueError. Entered the except block for image 4.
+
+Running per image
+:  50%|█████     | 5/10 [16:43:18<14:49:57, 10679.56s/it][AImage 5
+Init ValueError. Entered the except block for image 5.
+
+Running per image
+:  60%|██████    | 6/10 [16:54:33<8:05:11, 7277.89s/it]  [AImage 6
+Init ValueError. Entered the except block for image 6.
+
+Running per image
+:  70%|███████   | 7/10 [17:02:22<4:12:35, 5051.71s/it][AImage 7
+Init ValueError. Entered the except block for image 7.
+
+Running per image
+:  80%|████████  | 8/10 [17:18:50<2:05:16, 3758.05s/it][AImage 8
+Init ValueError. Entered the except block for image 8.
+
+Running per image
+:  90%|█████████ | 9/10 [17:27:31<45:46, 2746.31s/it]  [AImage 9
+
+Running per image
+: 100%|██████████| 10/10 [33:29:41<00:00, 19720.93s/it][ARunning per image
+: 100%|██████████| 10/10 [33:29:41<00:00, 12058.19s/it]
+Running Boundary Attack batches 10-10
+: 100%|██████████| 1/1 [33:29:41<00:00, 120581.93s/it]Running Boundary Attack batches 10-10
+: 100%|██████████| 1/1 [33:29:41<00:00, 120581.93s/it]
+Boundary Attack autoinit finished: {'total_processed': 10, 'total_successes': 0, 'total_init_failures': 8, 'success_fraction': 0.0}
+adding channel dimension to x_adv
+torch.Size([10, 1, 28, 28])
+adding channel dimension to x_test
+torch.Size([10, 1, 28, 28])
+Adversarial samples saved to boundary_samples.pt
