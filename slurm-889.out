@@ -1,0 +1,148 @@
+Thu Nov 13 04:08:23 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 560.35.05              Driver Version: 560.35.05      CUDA Version: 12.6     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce GTX 1080 Ti     Off |   00000000:02:00.0 Off |                  N/A |
+|  0%   31C    P8              8W /  250W |       3MiB /  11264MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA GeForce GTX 1080        Off |   00000000:03:00.0 Off |                  N/A |
+| 27%   30C    P8              6W /  180W |       3MiB /   8192MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  Tesla P100-PCIE-16GB           Off |   00000000:83:00.0 Off |                    0 |
+| N/A   29C    P0             27W /  250W |       0MiB /  16384MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Using device: cuda:0
+Diagnostic batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Diagnosing images:   0%|          | 0/10 [00:00<?, ?it/s][A
+Image 0: True label=0, Predictions=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  Consistency: 100.0%
+  Found initial adversarial: pred=4, pert=15.7188
+  Initial adv predictions: [7, 8, 2, 0, 4, 7, 0, 8, 4, 2]
+  Initial adv consistency: 20.0%
+  ERROR: Foolbox raised ValueError: init_attack failed for 1.0 of 1 inputs
+
+Diagnosing images:  10%|█         | 1/10 [52:52<7:55:49, 3172.21s/it][A
+Image 1: True label=6, Predictions=[6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+  Consistency: 100.0%
+  Found initial adversarial: pred=0, pert=15.1806
+  Initial adv predictions: [7, 8, 0, 0, 8, 0, 0, 0, 0, 0]
+  Initial adv consistency: 10.0%
+  ERROR: Foolbox raised ValueError: init_attack failed for 1.0 of 1 inputs
+
+Diagnosing images:  20%|██        | 2/10 [1:22:25<5:13:12, 2349.04s/it][A
+Image 2: True label=9, Predictions=[9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+  Consistency: 100.0%
+  Found initial adversarial: pred=0, pert=15.4148
+  Initial adv predictions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  Initial adv consistency: 100.0%
+  Attack success: False
+  Final perturbation: 2.1615
+  Reduction: 13.2533 (86.0%)
+  Final adv predictions: [9, 9, 9, 9, 9, 9, 9, 4, 9, 9]
+  Final adv consistency: 90.0%
+  REASON: Attack moved back to correct class region
+
+Diagnosing images:  30%|███       | 3/10 [17:03:57<52:38:24, 27072.11s/it][A
+Image 3: True label=0, Predictions=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  Consistency: 100.0%
+  Found initial adversarial: pred=8, pert=15.6133
+  Initial adv predictions: [9, 8, 0, 9, 4, 8, 8, 9, 8, 9]
+  Initial adv consistency: 40.0%
+  ERROR: Foolbox raised ValueError: init_attack failed for 1.0 of 1 inputs
+
+Diagnosing images:  40%|████      | 4/10 [17:48:09<29:03:06, 17431.13s/it][A
+Image 4: True label=1, Predictions=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  Consistency: 100.0%
+  Found initial adversarial: pred=9, pert=15.5961
+  Initial adv predictions: [0, 0, 7, 9, 0, 0, 0, 0, 0, 9]
+  Initial adv consistency: 70.0%
+  ERROR: Foolbox raised ValueError: init_attack failed for 1.0 of 1 inputs
+
+Diagnosing images:  50%|█████     | 5/10 [18:19:02<16:24:27, 11813.52s/it][A
+Image 5: True label=5, Predictions=[5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  Consistency: 100.0%
+  Found initial adversarial: pred=4, pert=15.5340
+  Initial adv predictions: [8, 7, 4, 0, 0, 7, 7, 4, 4, 0]
+  Initial adv consistency: 10.0%
+  ERROR: Foolbox raised ValueError: init_attack failed for 1.0 of 1 inputs
+
+Diagnosing images:  60%|██████    | 6/10 [18:51:19<9:23:42, 8455.56s/it]  [A
+Image 6: True label=9, Predictions=[9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+  Consistency: 100.0%
+  Found initial adversarial: pred=0, pert=15.7897
+  Initial adv predictions: [0, 0, 9, 0, 0, 0, 0, 0, 0, 0]
+  Initial adv consistency: 90.0%
+  Attack success: False
+  Final perturbation: 2.3951
+  Reduction: 13.3946 (84.8%)
+  Final adv predictions: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+  Final adv consistency: 100.0%
+  REASON: Attack moved back to correct class region
+
+Diagnosing images:  70%|███████   | 7/10 [34:39:19<20:14:19, 24286.64s/it][A
+Image 7: True label=7, Predictions=[7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+  Consistency: 100.0%
+  Found initial adversarial: pred=9, pert=15.6572
+  Initial adv predictions: [9, 0, 8, 5, 0, 9, 0, 0, 9, 0]
+  Initial adv consistency: 30.0%
+  ERROR: Foolbox raised ValueError: init_attack failed for 1.0 of 1 inputs
+
+Diagnosing images:  80%|████████  | 8/10 [35:13:09<9:33:22, 17201.41s/it] [A
+Image 8: True label=3, Predictions=[9, 1, 9, 3, 3, 3, 3, 3, 9, 3]
+  Consistency: 60.0%
+  Found initial adversarial: pred=9, pert=15.4877
+  Initial adv predictions: [0, 0, 0, 0, 7, 0, 0, 0, 0, 0]
+  Initial adv consistency: 90.0%
+  Attack success: True
+  Final perturbation: 0.0000
+  Reduction: 15.4877 (100.0%)
+  Final adv predictions: [3, 3, 3, 8, 3, 9, 3, 9, 9, 9]
+  Final adv consistency: 50.0%
+
+Diagnosing images:  90%|█████████ | 9/10 [50:48:05<8:09:20, 29360.29s/it][A
+Image 9: True label=4, Predictions=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  Consistency: 100.0%
+  Found initial adversarial: pred=9, pert=15.5822
+  Initial adv predictions: [0, 7, 0, 0, 0, 0, 0, 0, 0, 0]
+  Initial adv consistency: 90.0%
+  ERROR: Foolbox raised ValueError: init_attack failed for 1.0 of 1 inputs
+
+Diagnosing images: 100%|██████████| 10/10 [51:24:03<00:00, 20962.39s/it] [A
+                                                                        [ADiagnostic batches: 100%|██████████| 1/1 [51:24:03<00:00, 185043.43s/it]Diagnostic batches: 100%|██████████| 1/1 [51:24:03<00:00, 185043.43s/it]
+
+============================================================
+DIAGNOSTIC SUMMARY
+============================================================
+Total images tested: 10
+Initial adversarial found: 10/10 (100.0%)
+Attack success: 1/10 (10.0%)
+
+Failure reasons:
+  foolbox_error: 7 (70.0%)
+  crossed_back_to_correct: 2 (20.0%)
+
+Perturbation reduction statistics:
+  Mean: 14.0452
+  Median: 13.3946
+  Min: 13.2533
+  Max: 15.4877
+
+Original image prediction consistency:
+  Mean: 96.0%
+
+Diagnostic plots saved to boundary_diagnostics.png
